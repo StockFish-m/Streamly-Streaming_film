@@ -1,0 +1,24 @@
+# Build artifacts
+build/
+dist/
+out/
+*.class
+*.log
+
+# NetBeans private data
+nbproject/private/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+*.keystore
+*.jks
+*.p12

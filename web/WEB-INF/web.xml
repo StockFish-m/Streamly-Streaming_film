@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="6.0"
+         xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd">
+
+    <!-- Listener -->
+    <listener>
+        <listener-class>listener.UserRegisterListener</listener-class>
+    </listener>
+
+    <!-- Filters -->
+    <filter>
+        <filter-name>ContentActiveFilter</filter-name>
+        <filter-class>filter.ContentActiveFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ContentActiveFilter</filter-name>
+        <url-pattern>/watch</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>ContentActiveFilter</filter-name>
+        <url-pattern>/detail</url-pattern>
+    </filter-mapping>
+
+    <!-- Servlets -->
+    <servlet>
+        <servlet-name>WatchServlet</servlet-name>
+        <servlet-class>servlet.WatchServlet</servlet-class>
+    </servlet>
+
+    <!--    <servlet>
+        <servlet-name>WatchHistoryServlet</servlet-name>
+        <servlet-class>servlet.WatchHistoryServlet</servlet-class>
+    </servlet>-->
+    <servlet>
+        <servlet-name>SubscriptionServlet</servlet-name>
+        <servlet-class>servlet.SubscriptionServlet</servlet-class>
+    </servlet>
+
+
+<!--    <servlet>
+        <servlet-name>WatchHistoryServlet</servlet-name>
+        <servlet-class>servlet.WatchHistoryServlet</servlet-class>
+    </servlet>-->
+
+<!--    <servlet>
+        <servlet-name>ContentReviewServlet</servlet-name>
+        <servlet-class>servlet.ContentReviewServlet</servlet-class>
+    </servlet>-->
+    <servlet>
+        <servlet-name>AssistantChatServlet</servlet-name>
+        <servlet-class>servlet.AssistantChatServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>TrackServlet</servlet-name>
+        <servlet-class>servlet.TrackServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ContentManagerServlet</servlet-name>
+        <servlet-class>servlet.ContentManagerServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>WatchServlet</servlet-name>
+        <url-pattern>/watch</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DetailServlet</servlet-name>
+        <servlet-class>servlet.DetailServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DetailServlet</servlet-name>
+        <url-pattern>/detail</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UserLoginServlet</servlet-name>
+        <servlet-class>servlet.UserLoginServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserLoginServlet</servlet-name>
+        <url-pattern>/userlogin</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+
+        <servlet-name>UserSignupServlet</servlet-name>
+        <servlet-class>servlet.UserSignupServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserSignupServlet</servlet-name>
+        <url-pattern>/signup</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ViewerListServlet</servlet-name>
+
+        <servlet-class>servlet.ViewerListServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ViewerListServlet</servlet-name>
+        <url-pattern>/userlist</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>MainServlet</servlet-name>
+        <servlet-class>servlet.MainServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>MainServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UserEditServlet</servlet-name>
+        <servlet-class>servlet.UserEditServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserEditServlet</servlet-name>
+        <url-pattern>/user_edit</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>UserUpdateServlet</servlet-name>
+        <servlet-class>servlet.UserUpdateServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UserUpdateServlet</servlet-name>
+        <url-pattern>/update</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>SearchServlet</servlet-name>
+        <servlet-class>servlet.SearchServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SearchServlet</servlet-name>
+        <url-pattern>/search</url-pattern>
+    </servlet-mapping>
+
+    <!-- Optional welcome file -->
+    <!--
+    <welcome-file-list>
+        <welcome-file>main.jsp</welcome-file>
+    </welcome-file-list>
+    -->
+
+    <!--    <servlet-mapping>
+        <servlet-name>WatchHistoryServlet</servlet-name>
+        <url-pattern>/watchhistory</url-pattern>
+    </servlet-mapping>-->
+    <servlet-mapping>
+        <servlet-name>SubscriptionServlet</servlet-name>
+        <url-pattern>/SubscriptionServlet</url-pattern>
+    </servlet-mapping>
+
+
+<!--    <servlet-mapping>
+        <servlet-name>WatchHistoryServlet</servlet-name>
+        <url-pattern>/watchhistory</url-pattern>
+    </servlet-mapping>-->
+
+
+<!--    <servlet>
+        <servlet-name>ContentReviewServlet</servlet-name>
+        <servlet-class>servlet.ContentReviewServlet</servlet-class>
+    </servlet>-->
+<!--    <servlet-mapping>
+        <servlet-name>ContentReviewServlet</servlet-name>
+        <url-pattern>/review</url-pattern>
+    </servlet-mapping>-->
+
+    <servlet>
+        <servlet-name>AssistantChatServlet</servlet-name>
+        <servlet-class>servlet.AssistantChatServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AssistantChatServlet</servlet-name>
+        <url-pattern>/assistantChat</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>TrackServlet</servlet-name>
+        <servlet-class>servlet.TrackServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>TrackServlet</servlet-name>
+        <url-pattern>/track</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ContentManagerServlet</servlet-name>
+        <url-pattern>/manager/contentManager</url-pattern>
+    </servlet-mapping>
+</web-app>
