@@ -6,10 +6,7 @@ package dto;
 
 import java.util.Date;
 
-/**
- *
- * @author MinhooMinh
- */
+
 public class ViewerDTO extends UserDTO {
     private String activeSubscriptionName;
     private Date subscriptionStartDate;

@@ -7,10 +7,7 @@ package model.subscription;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- *
- * @author MinhooMinh
- */
+
 public class SubscriptionPlans {
     private static final Map<Integer, SubscriptionPlan> PLANS = new HashMap<>();
 

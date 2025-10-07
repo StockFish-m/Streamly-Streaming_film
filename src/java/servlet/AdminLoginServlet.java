@@ -16,10 +16,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import model.user.Employee;
 
-/**
- *
- * @author MinhooMinh
- */
+
 @WebServlet(name = "AdminLoginServlet", urlPatterns = {"/manager/adminlogin"})
 public class AdminLoginServlet extends HttpServlet {
 

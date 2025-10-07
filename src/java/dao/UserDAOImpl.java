@@ -20,10 +20,7 @@ import model.user.EmployeeRole;
 import model.user.User;
 import model.user.Viewer;
 
-/**
- *
- * @author ADMIN
- */
+
 public class UserDAOImpl implements UserDAO {
 
     private static final String SELECT_VIEWER_BY_USERNAME = "SELECT * FROM Viewer WHERE username = ? AND password_hash = ?";

@@ -6,10 +6,7 @@ package model.content;
 
 import java.util.Date;
 
-/**
- *
- * @author MinhooMinh
- */
+
 public class Movie extends Content {
 
     public Movie(int contentId, String title, String description, Date releaseDate, ContentType type, 

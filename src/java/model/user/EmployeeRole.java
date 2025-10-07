@@ -4,10 +4,7 @@
  */
 package model.user;
 
-/**
- *
- * @author MinhooMinh
- */
+
 public enum EmployeeRole {
     MOVIE_EDITOR(1, "Editor for Movies"),
     CUSTOMER_SUPPORT(2, "Customer Management"),

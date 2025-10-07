@@ -4,10 +4,6 @@
  */
 package dto;
 
-/**
- *
- * @author MinhooMinh
- */
 import java.util.Date;
 
 public class UserDTO {

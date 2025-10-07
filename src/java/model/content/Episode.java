@@ -4,10 +4,7 @@
  */
 package model.content;
 
-/**
- *
- * @author MinhooMinh
- */
+
 public class Episode {
     private int episodeId;
     private int contentId;

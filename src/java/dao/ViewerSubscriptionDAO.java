@@ -4,10 +4,7 @@
  */
 package dao;
 
-/**
- *
- * @author ADMIN
- */
+
 
 import model.subscription.PaymentTransaction;
 import java.sql.*;

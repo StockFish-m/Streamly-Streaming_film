@@ -7,10 +7,7 @@ package dao;
 import java.util.List;
 import model.user.UserReview;
 
-/**
- *
- * @author DELL
- */
+
 public interface UserReviewDAO {
     void insertReview(UserReview review);
     void updateReview(UserReview review);

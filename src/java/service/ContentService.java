@@ -9,10 +9,7 @@ import model.content.Content;
 import model.content.Movie;
 import model.content.Series;
 import java.sql.*;
-/**
- *
- * @author MinhooMinh
- */
+
 public class ContentService {
     public static Content extractContentFromResultSet(ResultSet rs) throws SQLException
     {

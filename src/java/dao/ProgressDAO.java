@@ -4,10 +4,7 @@
  */
 package dao;
 
-/**
- *
- * @author MinhooMinh
- */
+
 public interface ProgressDAO {
     void saveProgress(int userId, int contentId, double seconds);
     double getProgress(int userId, int contentId);

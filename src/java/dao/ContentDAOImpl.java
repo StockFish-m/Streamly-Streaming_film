@@ -19,10 +19,6 @@ import model.content.Series;
 import service.ContentService;
 
 
-/**
- *
- * @author DELL
- */
 public class ContentDAOImpl implements ContentDAO {
 
     private Connection conn;

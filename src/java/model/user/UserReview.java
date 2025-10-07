@@ -6,10 +6,7 @@ package model.user;
 
 import java.util.Date;
 
-/**
- *
- * @author DELL
- */
+
 public class UserReview {
     private int userId;
     private int contentId;

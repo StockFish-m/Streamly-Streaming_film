@@ -6,10 +6,6 @@ package model.subscription;
 
 import java.util.Date;
 
-/**
- *
- * @author MinhooMinh
- */
 public class SubscriptionPlan {
 
     private  int id;

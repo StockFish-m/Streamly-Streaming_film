@@ -15,22 +15,17 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 
-/**
- *
- * @author HP
- */
+
 public class ResetService {
     private final int LIMIT_MINUS = 10;
   
 
-      // ===== CHỈ THAY ĐỔI PHẦN CẤU HÌNH (đọc ENV hoặc -D system properties) =====
     private static String env(String key, String defVal) {
         String v = System.getenv(key);
         if (v == null || v.isBlank()) v = System.getProperty(key);
         return (v == null || v.isBlank()) ? defVal : v;
     }
 
-    // Lấy từ .env (đã có .env.example): MAIL_HOST, MAIL_PORT, MAIL_USERNAME, MAIL_PASSWORD, MAIL_FROM
     static final String MAIL_HOST = env("MAIL_HOST", "smtp.gmail.com");
     static final String MAIL_PORT = env("MAIL_PORT", "587");
     static final String MAIL_USER = env("MAIL_USERNAME", "");

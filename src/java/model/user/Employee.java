@@ -8,10 +8,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-/**
- *
- * @author MinhooMinh
- */
+
 public class Employee extends User {
     private List<EmployeeRole> roles;
 

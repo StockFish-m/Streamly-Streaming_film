@@ -6,10 +6,7 @@ package dao;
 
 import java.sql.*;
 
-/**
- *
- * @author MinhooMinh
- */
+
 public class ProgressDAOImpl implements ProgressDAO {
 
     @Override

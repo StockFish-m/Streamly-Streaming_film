@@ -4,10 +4,7 @@ package model.subscription;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-/**
- *
- * @author MinhooMinh
- */
+
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;

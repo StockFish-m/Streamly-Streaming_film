@@ -8,10 +8,7 @@ import java.util.List;
 import model.content.Content;
 import model.content.Movie;
 
-/**
- *
- * @author MinhooMinh
- */
+
 public interface ContentDAO {
     
     //get content by its id

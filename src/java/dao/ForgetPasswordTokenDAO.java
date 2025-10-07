@@ -6,10 +6,7 @@ package dao;
 
 import model.user.ForgetPasswordToken;
 
-/**
- *
- * @author ADMIN
- */
+
 public interface ForgetPasswordTokenDAO {
     
     public boolean insertTokenForget(ForgetPasswordToken tokenForget);

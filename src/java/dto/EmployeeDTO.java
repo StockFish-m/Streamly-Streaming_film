@@ -4,10 +4,7 @@
  */
 package dto;
 
-/**
- *
- * @author MinhooMinh
- */
+
 import java.util.Date;
 import java.util.List;
 

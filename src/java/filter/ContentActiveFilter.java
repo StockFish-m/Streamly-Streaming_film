@@ -17,10 +17,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import model.content.Content;
 
-/**
- *
- * @author DELL
- */
+
 public class ContentActiveFilter implements Filter {
 
     @Override

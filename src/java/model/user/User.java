@@ -6,10 +6,7 @@ package model.user;
 
 import java.util.Date;
 
-/**
- *
- * @author ADMIN
- */
+
 public class User {
     private int user_id;
     private String username;

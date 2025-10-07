@@ -6,10 +6,7 @@ package model.user;
 
 import java.time.LocalDateTime;
 
-/**
- *
- * @author HP
- */
+
 public class ForgetPasswordToken {
     private int id, userId;
     private boolean isUsed;
