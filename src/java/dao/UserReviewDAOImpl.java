@@ -12,7 +12,7 @@ public class UserReviewDAOImpl implements UserReviewDAO {
 
     @Override
     public void insertReview(UserReview review) {
-        String sql = "INSERT INTO UserReview (user_id, content_id, rating, comment, review_date) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO [dbo].[UserReview] ([user_id], [content_id], [rating], [comment], [review_date]) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, review.getUserId());
@@ -29,7 +29,7 @@ public class UserReviewDAOImpl implements UserReviewDAO {
 
     @Override
     public void updateReview(UserReview review) {
-        String sql = "UPDATE UserReview SET rating = ?, comment = ?, review_date = ? WHERE user_id = ? AND content_id = ?";
+        String sql = "UPDATE [dbo].[UserReview] SET [rating] = ?, [comment] = ?, [review_date] = ? WHERE [user_id] = ? AND [content_id] = ?";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, review.getRating());
@@ -46,7 +46,7 @@ public class UserReviewDAOImpl implements UserReviewDAO {
 
     @Override
     public UserReview getReviewByUserAndContent(int userId, int contentId) {
-        String sql = "SELECT r.*, u.fullname FROM UserReview r JOIN Viewer u ON r.user_id = u.user_id WHERE r.user_id = ? AND r.content_id = ?";
+        String sql = "SELECT r.*, u.fullname FROM [dbo].[UserReview] r JOIN [dbo].[Viewer] u ON r.user_id = u.user_id WHERE r.user_id = ? AND r.content_id = ?";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, userId);
@@ -73,7 +73,7 @@ public class UserReviewDAOImpl implements UserReviewDAO {
     @Override
     public List<UserReview> getReviewsByContent(int contentId) {
         List<UserReview> reviews = new ArrayList<>();
-        String sql = "SELECT r.*, u.fullname FROM UserReview r JOIN Viewer u ON r.user_id = u.user_id WHERE r.content_id = ?";
+        String sql = "SELECT r.*, u.fullname FROM [dbo].[UserReview] r JOIN [dbo].[Viewer] u ON r.user_id = u.user_id WHERE r.content_id = ? ORDER BY r.review_date DESC";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, contentId);
@@ -98,7 +98,7 @@ public class UserReviewDAOImpl implements UserReviewDAO {
 
     @Override
     public double getAverageRatingByContentId(int contentId) {
-        String sql = "SELECT AVG(CAST(rating AS FLOAT)) AS avg_rating FROM UserReview WHERE content_id = ?";
+        String sql = "SELECT AVG(CAST([rating] AS FLOAT)) AS avg_rating FROM [dbo].[UserReview] WHERE [content_id] = ?";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, contentId);

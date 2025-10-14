@@ -21,7 +21,6 @@ import jakarta.servlet.http.HttpServletRequest;
  */
 public class Config {
 
-  // Helper đọc env có default
     private static String env(String key, String defVal) {
         String v = System.getenv(key);
         if (v == null || v.isBlank()) {

@@ -12,7 +12,7 @@ public class ProgressDAOImpl implements ProgressDAO {
     @Override
     public void saveProgress(int userId, int contentId, double seconds) {
         try (Connection conn = DBConnection.getConnection()) {
-            String sql = "MERGE INTO WatchProgress AS target "
+            String sql = "MERGE INTO [dbo].[WatchProgress] AS target "
                     + "USING (SELECT ? AS user_id, ? AS content_id) AS source "
                     + "ON target.user_id = source.user_id AND target.content_id = source.content_id "
                     + "WHEN MATCHED THEN "
@@ -37,7 +37,7 @@ public class ProgressDAOImpl implements ProgressDAO {
     @Override
     public double getProgress(int userId, int contentId) {
         try (Connection conn = DBConnection.getConnection()) {
-            String sql = "SELECT watched_seconds FROM WatchProgress WHERE user_id = ? AND content_id = ?";
+            String sql = "SELECT watched_seconds FROM [dbo].[WatchProgress] WHERE user_id = ? AND content_id = ?";
             try (PreparedStatement ps = conn.prepareStatement(sql)) {
                 ps.setInt(1, userId);
                 ps.setInt(2, contentId);

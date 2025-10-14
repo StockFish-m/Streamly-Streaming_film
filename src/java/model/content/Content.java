@@ -135,9 +135,12 @@ public abstract class Content {
 
     
     public int getReleaseYear() {
+        if (releaseDate == null) {
+            return 0;
+        }
         Calendar cal = Calendar.getInstance();
         cal.setTime(releaseDate);
         return cal.get(Calendar.YEAR);
     }
-    
+
 }

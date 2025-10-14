@@ -10,7 +10,7 @@ import service.ContentService;
 public class LibraryDAOImpl implements LibraryDAO {
 
     private static final String INSERT_SQL
-            = "INSERT INTO WatchHistory (user_id, content_id, episode_id, watched_at) VALUES (?, ?, ?, GETDATE())";
+            = "INSERT INTO [dbo].[WatchHistory] (user_id, content_id, episode_id, watched_at) VALUES (?, ?, ?, GETDATE())";
 
     @Override
     public void insertWatchHistory(int userId, int contentId, Integer episodeId) {
@@ -33,7 +33,7 @@ public class LibraryDAOImpl implements LibraryDAO {
     @Override
     public List<WatchHistory> getWatchHistoryByUserId(int userId) {
         List<WatchHistory> historyList = new ArrayList<>();
-        String sql = "SELECT * FROM WatchHistory WHERE user_id = ? ORDER BY watched_at DESC";
+        String sql = "SELECT * FROM [dbo].[WatchHistory] WHERE user_id = ? ORDER BY watched_at DESC";
 
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -63,7 +63,7 @@ public class LibraryDAOImpl implements LibraryDAO {
 
     @Override
     public void removeFromWatchlist(int userId, int contentId) {
-        String sql = "DELETE FROM WatchList WHERE user_id = ? AND content_id = ?";
+        String sql = "DELETE FROM [dbo].[WatchList] WHERE user_id = ? AND content_id = ?";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setInt(1, userId);
@@ -77,9 +77,9 @@ public class LibraryDAOImpl implements LibraryDAO {
 
     @Override
     public void insertToWatchlist(int userId, int contentId) {
-        String countSql = "SELECT COUNT(*) FROM WatchList WHERE user_id = ?";
-        String existsSql = "SELECT 1 FROM WatchList WHERE user_id = ? AND content_id = ?";
-        String insertSql = "INSERT INTO WatchList (user_id, content_id, priority, added_at) VALUES (?, ?, 1, GETDATE())";
+        String countSql = "SELECT COUNT(*) FROM [dbo].[WatchList] WHERE user_id = ?";
+        String existsSql = "SELECT 1 FROM [dbo].[WatchList] WHERE user_id = ? AND content_id = ?";
+        String insertSql = "INSERT INTO [dbo].[WatchList] (user_id, content_id, priority, added_at) VALUES (?, ?, 1, GETDATE())";
 
         try (Connection conn = DBConnection.getConnection()) {
 
@@ -120,8 +120,8 @@ public class LibraryDAOImpl implements LibraryDAO {
     @Override
     public List<Content> getWatchListByUserId(int userId) {
         List<Content> watchList = new ArrayList<>();
-        String sql = "SELECT c.* FROM WatchList w "
-                + "JOIN Content c ON w.content_id = c.content_id "
+        String sql = "SELECT c.* FROM [dbo].[WatchList] w "
+                + "JOIN [dbo].[Content] c ON w.content_id = c.content_id "
                 + "WHERE w.user_id = ? ORDER BY w.priority ASC";
 
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -142,7 +142,7 @@ public class LibraryDAOImpl implements LibraryDAO {
 
     @Override
     public int getWatchlistCount(int userId) {
-        String sql = "SELECT COUNT(*) FROM WatchList WHERE user_id = ?";
+        String sql = "SELECT COUNT(*) FROM [dbo].[WatchList] WHERE user_id = ?";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setInt(1, userId);
             ResultSet rs = ps.executeQuery();

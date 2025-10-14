@@ -4,7 +4,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Tìm kiếm phim</title>
+    <title>Search film</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <style>
@@ -134,19 +134,19 @@
 
     <%@include file="/includes/header.jsp" %>
 
-    <h2>Tìm kiếm phim</h2>
+    <h2>Search film</h2>
 
     <form action="search" method="post" class="search-form">
         <div class="form-group">
-            <label for="searchTerm">Tìm tên:</label>
+            <label for="searchTerm">Name:</label>
             <input type="text" id="searchTerm" name="searchTerm"
                    value="${param.searchTerm != null ? param.searchTerm : ''}" />
         </div>
 
         <div class="form-group">
-            <label for="genreId">Thể loại:</label>
+            <label for="genreId">genre:</label>
             <select name="genreId" id="genreId">
-                <option value="0">-- Tất cả --</option>
+                <option value="0">-- All --</option>
                 <c:forEach var="genre" items="${genreList}">
                     <option value="${genre.genreId}"
                         <c:if test="${param.genreId == genre.genreId}">selected</c:if>>
@@ -157,9 +157,9 @@
         </div>
 
         <div class="form-group">
-            <label for="releaseYearId">Năm:</label>
+            <label for="releaseYearId">Year:</label>
             <select name="releaseYearId" id="releaseYearId">
-                <option value="0">-- Tất cả --</option>
+                <option value="0">-- All --</option>
                 <c:forEach var="releaseYear" items="${releaseYearList}">
                     <option value="${releaseYear}"
                         <c:if test="${param.releaseYearId == releaseYear}">selected</c:if>>
@@ -170,19 +170,19 @@
         </div>
 
         <div class="form-group">
-            <label for="typeId">Định dạng:</label>
+            <label for="typeId">Type:</label>
             <select name="typeId" id="typeId">
-                <option value="">-- Tất cả --</option>
-                <option value="movie" <c:if test="${param.typeId == 'movie'}">selected</c:if>>Phim</option>
-                <option value="series" <c:if test="${param.typeId == 'series'}">selected</c:if>>Loạt truyện</option>
+                <option value="">-- All --</option>
+                <option value="movie" <c:if test="${param.typeId == 'movie'}">selected</c:if>>Movie</option>
+                <option value="series" <c:if test="${param.typeId == 'series'}">selected</c:if>>Series</option>
             </select>
         </div>
 
-        <button type="submit" class="btn-search">Tìm kiếm</button>
+        <button type="submit" class="btn-search">Search</button>
     </form>
 
     <c:if test="${not empty searchResults}">
-        <h3>Kết quả tìm kiếm</h3>
+        <h3>Result</h3>
         <div class="movie-grid">
             <c:forEach var="movie" items="${searchResults}">
                 <div class="movie-card">

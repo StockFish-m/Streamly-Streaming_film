@@ -12,6 +12,7 @@ public class WatchHistory {
     // Optional display fields (used in some queries)
     private String title;
     private String video_url;
+    private String thumbnail_url;
     
     public WatchHistory()
     {
@@ -31,6 +32,14 @@ public class WatchHistory {
         this(history_id, content_id, user_id, episode_id, watched_at);
         this.title = title;
         this.video_url = video_url;
+    }
+
+    // Extended constructor with thumbnail
+    public WatchHistory(int history_id, int content_id, int user_id, int episode_id, Date watched_at, String title, String video_url, String thumbnail_url) {
+        this(history_id, content_id, user_id, episode_id, watched_at);
+        this.title = title;
+        this.video_url = video_url;
+        this.thumbnail_url = thumbnail_url;
     }
 
     public int getHistory_id() {
@@ -87,5 +96,13 @@ public class WatchHistory {
 
     public void setVideo_url(String video_url) {
         this.video_url = video_url;
+    }
+
+    public String getThumbnail_url() {
+        return thumbnail_url;
+    }
+
+    public void setThumbnail_url(String thumbnail_url) {
+        this.thumbnail_url = thumbnail_url;
     }
 }

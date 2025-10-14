@@ -148,14 +148,14 @@ public class ContentDAOImpl implements ContentDAO {
     @Override
     public List<String> getGenresByContentId(int contentId) {
         List<String> genres = new ArrayList<>();
-        String sql = "SELECT g.genre_name FROM Genre g "
-                + "JOIN ContentGenre cg ON g.genre_id = cg.genre_id "
+        String sql = "SELECT g.name FROM [dbo].[Genre] g "
+                + "JOIN [dbo].[ContentGenre] cg ON g.genre_id = cg.genre_id "
                 + "WHERE cg.content_id = ?";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, contentId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
-                genres.add(rs.getString("genre_name"));
+                genres.add(rs.getString("name"));
             }
         } catch (Exception e) {
             e.printStackTrace();

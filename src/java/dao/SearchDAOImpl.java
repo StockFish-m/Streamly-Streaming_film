@@ -7,6 +7,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import model.content.Content;
 import service.ContentService;
@@ -25,9 +27,11 @@ public class SearchDAOImpl implements SearchDAO {
         Map<Integer, Genre> map = new HashMap<>();
         String sql = "SELECT * FROM Genre";
 
-        try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+        try (Connection conn = DBConnection.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
-                Genre genre = new Genre(rs.getInt("genre_id"), rs.getString("genre_name"));
+                Genre genre = new Genre(rs.getInt("genre_id"), rs.getString("name"));
                 map.put(genre.getGenreId(), genre);
             }
         } catch (SQLException e) {
@@ -39,13 +43,19 @@ public class SearchDAOImpl implements SearchDAO {
 
     @Override
     public List<Genre> getAllGenres() {
+        if (genreMap == null || genreMap.isEmpty()) {
+            genreMap = loadAllGenres();
+        }
         return new ArrayList<>(genreMap.values());
     }
 
     @Override
     public List<Integer> getAllReleaseYears() {
         List<Integer> years = new ArrayList<>();
-        String sql = "SELECT DISTINCT YEAR(release_date) AS release_year FROM Content ORDER BY release_year DESC";
+        String sql = "SELECT DISTINCT YEAR(c.release_date) AS release_year "
+                + "FROM [dbo].[Content] c "
+                + "WHERE c.release_date IS NOT NULL AND c.is_active = 1 "
+                + "ORDER BY release_year DESC";
 
         try (Connection conn = DBConnection.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
@@ -63,29 +73,32 @@ public class SearchDAOImpl implements SearchDAO {
     @Override
     public List<Content> searchContents(String searchTerm, int genreId, int releaseYear, String contentType) {
         List<Content> result = new ArrayList<>();
-        StringBuilder sql = new StringBuilder("SELECT * FROM Content WHERE 1=1");
+        StringBuilder sql = new StringBuilder("SELECT c.* FROM [dbo].[Content] c WHERE c.is_active = 1");
 
         List<Object> params = new ArrayList<>();
 
-        if (searchTerm != null && !searchTerm.isEmpty()) {
-            sql.append(" AND title LIKE ?");
-            params.add("%" + searchTerm + "%");
+        if (searchTerm != null && !searchTerm.isBlank()) {
+            sql.append(" AND c.title LIKE ?");
+            params.add("%" + searchTerm.trim() + "%");
         }
 
         if (genreId > 0) {
-            sql.append(" AND content_id IN (SELECT content_id FROM ContentGenre WHERE genre_id = ?)");
+            sql.append(" AND EXISTS (SELECT 1 FROM [dbo].[ContentGenre] cg "
+                    + "WHERE cg.content_id = c.content_id AND cg.genre_id = ?)");
             params.add(genreId);
         }
 
         if (releaseYear > 0) {
-            sql.append(" AND YEAR(release_date) = ?");
+            sql.append(" AND c.release_date IS NOT NULL AND YEAR(c.release_date) = ?");
             params.add(releaseYear);
         }
 
-        if (contentType != null && !contentType.isEmpty()) {
-            sql.append(" AND type = ?");
-            params.add(contentType);
+        if (contentType != null && !contentType.isBlank()) {
+            sql.append(" AND UPPER(c.type) = UPPER(?)");
+            params.add(contentType.trim());
         }
+
+        sql.append(" ORDER BY CASE WHEN c.release_date IS NULL THEN 1 ELSE 0 END, c.release_date DESC, c.title ASC");
 
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql.toString())) {
             for (int i = 0; i < params.size(); i++) {
@@ -106,37 +119,32 @@ public class SearchDAOImpl implements SearchDAO {
     }
 
 
-//    @Override
-//    public Genre getGenreById(String id) {
-//        String sql = "SELECT * FROM Genre WHERE id = ?";
-//        try (Connection conn = DBConnection.getConnection();
-//             PreparedStatement ps = conn.prepareStatement(sql)) {
-//            ps.setString(1, id);
-//            ResultSet rs = ps.executeQuery();
-//            if (rs.next()) {
-//                return new Genre(rs.getString("id"), rs.getString("name"));
-//            }
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
+
     @Override
     public Genre getGenreById(int genreId) {
-        Genre genre = genreMap.get(genreId);
-        if (genre == null) {
-            System.out.println("Genre not found for ID: " + genreId);
+        if (genreMap == null || genreMap.isEmpty()) {
+            genreMap = loadAllGenres();
         }
-        return genre;
+        return genreMap.get(genreId);
     }
 
     @Override
     public void addGenre(Genre genre) {
-        String sql = "INSERT INTO Genre (id, name) VALUES (?, ?)";
-        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, genre.getGenreId());
-            ps.setString(2, genre.getGenreName());
+        String sql = "INSERT INTO [dbo].[Genre] (name) VALUES (?)";
+        try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, genre.getGenreName());
             ps.executeUpdate();
+
+            try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    genre.setGenreId(generatedKeys.getInt(1));
+                }
+            }
+
+            if (genreMap == null) {
+                genreMap = new LinkedHashMap<>();
+            }
+            genreMap.put(genre.getGenreId(), genre);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -148,7 +156,14 @@ public class SearchDAOImpl implements SearchDAO {
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, genre.getGenreName());
             ps.setInt(2, genre.getGenreId());
-            return ps.executeUpdate() > 0;
+            boolean updated = ps.executeUpdate() > 0;
+            if (updated) {
+                if (genreMap == null) {
+                    genreMap = new LinkedHashMap<>();
+                }
+                genreMap.put(genre.getGenreId(), genre);
+            }
+            return updated;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -156,11 +171,19 @@ public class SearchDAOImpl implements SearchDAO {
     }
 
     @Override
-    public boolean deleteGenre(String id) {
+    public boolean deleteGenre(int genreId) {
         String sql = "DELETE FROM Genre WHERE id = ?";
         try (Connection conn = DBConnection.getConnection(); PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, id);
-            return ps.executeUpdate() > 0;
+            ps.setInt(1, genreId);
+            boolean deleted = ps.executeUpdate() > 0;
+            if (deleted) {
+                if (genreMap == null) {
+                    genreMap = loadAllGenres();
+                } else {
+                    genreMap.remove(genreId);
+                }
+            }
+            return deleted;
         } catch (Exception e) {
             e.printStackTrace();
         }

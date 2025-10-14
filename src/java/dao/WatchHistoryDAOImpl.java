@@ -11,7 +11,7 @@ public class WatchHistoryDAOImpl implements WatchHistoryDAO {
     @Override
     public List<WatchHistory> getWatchHistoriesByUserId(int userId) {
         List<WatchHistory> list = new ArrayList<>();
-        String sql = "SELECT * FROM WatchHistory WHERE user_id = ?";
+        String sql = "SELECT * FROM [dbo].[WatchHistory] WHERE user_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -28,7 +28,7 @@ public class WatchHistoryDAOImpl implements WatchHistoryDAO {
 
     @Override
     public WatchHistory getWatchHistoryById(int historyId) {
-        String sql = "SELECT * FROM WatchHistory WHERE history_id = ?";
+        String sql = "SELECT * FROM [dbo].[WatchHistory] WHERE history_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -45,7 +45,7 @@ public class WatchHistoryDAOImpl implements WatchHistoryDAO {
 
     @Override
     public void addWatchHistory(WatchHistory history) {
-        String sql = "INSERT INTO WatchHistory (content_id, user_id, episode_id, watched_at) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO [dbo].[WatchHistory] (content_id, user_id, episode_id, watched_at) VALUES (?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -72,7 +72,7 @@ public class WatchHistoryDAOImpl implements WatchHistoryDAO {
 
     @Override
     public boolean updateWatchHistory(WatchHistory history) {
-        String sql = "UPDATE WatchHistory SET content_id = ?, user_id = ?, episode_id = ?, watched_at = ? WHERE history_id = ?";
+        String sql = "UPDATE [dbo].[WatchHistory] SET content_id = ?, user_id = ?, episode_id = ?, watched_at = ? WHERE history_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -102,7 +102,7 @@ public class WatchHistoryDAOImpl implements WatchHistoryDAO {
 
     @Override
     public boolean deleteWatchHistory(int historyId) {
-        String sql = "DELETE FROM WatchHistory WHERE history_id = ?";
+        String sql = "DELETE FROM [dbo].[WatchHistory] WHERE history_id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -116,7 +116,7 @@ public class WatchHistoryDAOImpl implements WatchHistoryDAO {
 
     @Override
     public boolean hasWatched(int userId, int contentId, Integer episodeId) {
-        String sql = "SELECT 1 FROM WatchHistory WHERE user_id = ? AND content_id = ? AND (episode_id = ? OR (? IS NULL AND episode_id IS NULL))";
+        String sql = "SELECT 1 FROM [dbo].[WatchHistory] WHERE user_id = ? AND content_id = ? AND (episode_id = ? OR (? IS NULL AND episode_id IS NULL))";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -153,12 +153,20 @@ public class WatchHistoryDAOImpl implements WatchHistoryDAO {
 public List<WatchHistory> getDetailedWatchHistoriesByUserId(int userId) {
     List<WatchHistory> list = new ArrayList<>();
     String sql = """
+        WITH latest AS (
+            SELECT content_id, MAX(watched_at) AS max_watched
+            FROM [dbo].[WatchHistory]
+            WHERE user_id = ?
+            GROUP BY content_id
+        )
         SELECT wh.history_id, wh.content_id, wh.user_id, wh.episode_id, wh.watched_at,
                ISNULL(e.title, c.title) AS title,
-               ISNULL(e.video_url, c.video_url) AS video_url
-        FROM WatchHistory wh
-        LEFT JOIN Episodes e ON wh.episode_id = e.episode_id
-        JOIN Content c ON wh.content_id = c.content_id
+               ISNULL(e.video_url, c.video_url) AS video_url,
+               c.thumbnail_url AS thumbnail_url
+        FROM [dbo].[WatchHistory] wh
+        JOIN latest l ON l.content_id = wh.content_id AND l.max_watched = wh.watched_at
+        LEFT JOIN [dbo].[Episodes] e ON wh.episode_id = e.episode_id
+        JOIN [dbo].[Content] c ON wh.content_id = c.content_id
         WHERE wh.user_id = ?
         ORDER BY wh.watched_at DESC
     """;
@@ -167,6 +175,7 @@ public List<WatchHistory> getDetailedWatchHistoriesByUserId(int userId) {
          PreparedStatement ps = conn.prepareStatement(sql)) {
 
         ps.setInt(1, userId);
+        ps.setInt(2, userId);
         ResultSet rs = ps.executeQuery();
         while (rs.next()) {
             int historyId = rs.getInt("history_id");
@@ -177,7 +186,9 @@ public List<WatchHistory> getDetailedWatchHistoriesByUserId(int userId) {
             String title = rs.getString("title");
             String videoUrl = rs.getString("video_url");
 
-            WatchHistory wh = new WatchHistory(historyId, contentId, uId, episodeId, watchedAt, title, videoUrl);
+            String thumbnailUrl = rs.getString("thumbnail_url");
+
+            WatchHistory wh = new WatchHistory(historyId, contentId, uId, episodeId, watchedAt, title, videoUrl, thumbnailUrl);
             list.add(wh);
         }
     } catch (Exception e) {

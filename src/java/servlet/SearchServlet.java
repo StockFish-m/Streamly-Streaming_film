@@ -73,22 +73,32 @@ public class SearchServlet extends HttpServlet {
     private void handleSearch(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String searchTerm = request.getParameter("searchTerm");
+        String searchTermRaw = request.getParameter("searchTerm");
         String genreIdParam = request.getParameter("genreId");
         String yearParam = request.getParameter("releaseYearId");
-        String selectedTypeId = request.getParameter("typeId");
+        String selectedTypeParam = request.getParameter("typeId");
+
+        String searchTerm = (searchTermRaw != null) ? searchTermRaw.trim() : null;
+        if (searchTerm != null && searchTerm.isEmpty()) {
+            searchTerm = null;
+        }
+
+        String selectedTypeId = (selectedTypeParam != null) ? selectedTypeParam.trim() : null;
+        if (selectedTypeId != null && selectedTypeId.isEmpty()) {
+            selectedTypeId = null;
+        }
 
         int selectedGenreId = 0;
         int selectedReleaseYear = 0;
 
         try {
-            selectedGenreId = genreIdParam != null ? Integer.parseInt(genreIdParam) : 0;
+            selectedGenreId = genreIdParam != null ? Integer.parseInt(genreIdParam.trim()) : 0;
         } catch (NumberFormatException e) {
             selectedGenreId = 0;
         }
 
         try {
-            selectedReleaseYear = yearParam != null ? Integer.parseInt(yearParam) : 0;
+            selectedReleaseYear = yearParam != null ? Integer.parseInt(yearParam.trim()) : 0;
         } catch (NumberFormatException e) {
             selectedReleaseYear = 0;
         }

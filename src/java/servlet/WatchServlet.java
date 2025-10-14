@@ -91,7 +91,7 @@ public class WatchServlet extends HttpServlet {
                 return;
             }
 
-            double averageRating = reviewDAO.getAverageRatingByContentId(contentId);  // e.g. from DAO
+            double averageRating = reviewDAO.getAverageRatingByContentId(contentId);  
             List<UserReview> latestReviews = reviewDAO.getReviewsByContent(contentId);
 
             request.setAttribute("averageRating", averageRating);

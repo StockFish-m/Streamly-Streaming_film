@@ -125,10 +125,23 @@
     const watchedSeconds = <%= request.getAttribute("watchedSeconds") != null ? request.getAttribute("watchedSeconds") : 0 %>;
 
     const video = document.getElementById("videoPlayer");
+    let historyLogged = false;
 
     video.addEventListener("loadedmetadata", () => {
         if (watchedSeconds && watchedSeconds < video.duration - 5) {
             video.currentTime = watchedSeconds;
+        }
+    });
+
+    // Log a watch history entry once when playback starts
+    video.addEventListener('play', () => {
+        if (!historyLogged) {
+            historyLogged = true;
+            fetch('log_history', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: Number(userId), contentId: Number(videoId) })
+            }).catch(() => {});
         }
     });
 

@@ -18,5 +18,5 @@ public interface SearchDAO {
     //employee side
     void addGenre(Genre genre);
     boolean updateGenre(Genre genre);
-    boolean deleteGenre(String id);
+    boolean deleteGenre(int genreId);
 }
