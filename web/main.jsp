@@ -107,7 +107,7 @@
                         <a href="${pageContext.request.contextPath}/detail?id=${movie.contentId}">
                             <img src="${movie.thumbnailUrl}" alt="${movie.title}">
                             <h3>${movie.title}</h3>
-                            <p>${movie.releaseDate}</p>
+                            <p>${movie.releaseYear}</p>
                         </a>
                     </div>
                 </c:forEach>
