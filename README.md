@@ -46,6 +46,8 @@ https://youtu.be/7XKL2nH0eWI
 
 ## 🧩 Cấu trúc thư mục
 
+```
+
 Streamly/
 ├── src/java/
 │ ├── model/ # Các class entity (Content, User, Subscription,...)
@@ -64,6 +66,7 @@ Streamly/
 └── README.md
 
 
+```
 
 ## 💳 Tích hợp thanh toán VNPAY
 
